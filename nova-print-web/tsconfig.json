@@ -1,0 +1,33 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "module": "esnext",
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": [
+        "components/*"
+      ],
+      "@/hooks/*": [
+        "hooks/*"
+      ],
+      "@/contexts/*": [
+        "contexts/*"
+      ],
+      "@/queries/*": [
+        "queries/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
+}

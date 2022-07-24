@@ -1,0 +1,47 @@
+{
+  "name": "nova-print",
+  "description": "A printer managment system for print farms",
+  "version": "1.0.0",
+  "license": "MIT",
+  "homepage": "https://github.com/BALLcoin/monorepo#readme",
+  "repository": {
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/jwaterfall/nova-print.git"
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/jwaterfall/nova-print/issues"
+  },
+  "author": {
+    "name": "Jack Waterfall",
+    "url": "https://github.com/jwaterfall"
+  },
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev": "npm run dev --workspaces",
+    "start": "npm run start --workspaces",
+    "test": "npm run test --workspaces"
+  },
+  "workspaces": [
+    "nova-print-libs",
+    "nova-print-node",
+    "nova-print-web"
+  ],
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^3.2.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.30.5",
+    "eslint": "^8.18.0",
+    "eslint-plugin-react": "^7.30.1",
+    "nodemon": "^2.0.16",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.7.4",
+    "microbundle": "^0.15.0"
+  },
+  "engines": {
+    "node": ">=16.15.1",
+    "npm": ">=8.12.2"
+  }
+}
