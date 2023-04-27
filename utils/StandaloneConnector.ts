@@ -75,6 +75,20 @@ class StandaloneConnector implements Connector {
             return -1;
         }
     }
+
+    public async getFirmwareVersion(): Promise<string> {
+        try {
+            const response = await axios.get(`http://${this.host}/rr_model`, {
+                params: {
+                    key: 'boards',
+                },
+            });
+
+            return response.data.result[0].firmwareVersion;
+        } catch (e) {
+            return '';
+        }
+    }
 }
 
 export default StandaloneConnector;
