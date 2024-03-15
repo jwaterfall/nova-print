@@ -3,6 +3,11 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
-}
+  output: 'export',
+};
 
-module.exports = nextConfig
+const withPWA = require('next-pwa')({
+  dest: 'public',
+});
+
+module.exports = withPWA(nextConfig);

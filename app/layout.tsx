@@ -10,6 +10,7 @@ const poppins = Poppins({ subsets: ['latin'], weight: ['400', '500', '600'] });
 export const metadata = {
   title: 'Nova Print',
   description: 'A lightweight 3D printer interface',
+  manifest: '/manifest.json',
 };
 
 const RootLayout: FC<PropsWithChildren> = ({ children }) => (

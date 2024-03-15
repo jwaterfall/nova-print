@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { IconType } from 'react-icons';
 import { HiRocketLaunch, HiSquares2X2, HiFolder, HiCog6Tooth } from 'react-icons/hi2';
-import numbro from 'numbro';
 
 import useController from '@/utils/Controller';
 
@@ -17,7 +16,7 @@ interface SidebarLinkProps {
 
 const SidebarLink: FC<PropsWithChildren<SidebarLinkProps>> = ({ Icon, href, exact = true, children }) => {
   const pathname = usePathname();
-  const isActive = exact ? pathname === href : pathname.startsWith(href);
+  const isActive = pathname ? (exact ? pathname === href : pathname.startsWith(href)) : false;
 
   return (
     <Link
@@ -45,17 +44,14 @@ const Sidebar: FC = () => {
       </div>
       <div className="bg-neutral-50 rounded-xl border border-neutral-200">
         <div className="p-4">
-          {connected && (
+          {connected ? (
             <>
               <h4 className="text-lg font-medium">Ender 3 Pro</h4>
               <h6 className="text-sm text-neutral-500">Firmware: v{data?.[0]?.firmwareVersion}</h6>
-              <h6 className="text-sm text-neutral-500 mb-4">MCU Temp: {numbro(data?.[0]?.mcuTemp?.current).format('0.0')}°C</h6>
+              <button className="bg-red-500 text-neutral-50 text-sm rounded-xl px-4 py-2 w-full" onClick={disconnect}>
+                Disconnect
+              </button>
             </>
-          )}
-          {connected ? (
-            <button className="bg-red-500 text-neutral-50 text-sm rounded-xl px-4 py-2 w-full" onClick={disconnect}>
-              Disconnect
-            </button>
           ) : (
             <button className="bg-blue-500 text-neutral-50 text-sm rounded-xl px-4 py-2 w-full" onClick={connect}>
               Connect

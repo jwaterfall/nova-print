@@ -1,13 +1,11 @@
 'use client';
 
-import { FC, PropsWithChildren, createContext, useContext, useState } from 'react';
+import { FC, PropsWithChildren, createContext, useContext, useEffect, useRef, useState } from 'react';
 import { QueryClient, QueryClientProvider, UseQueryResult, useQuery } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import PollConnector from './PollConnector';
 import { ModelKey, ModelValue } from './Model';
-
-const connector = new PollConnector();
 
 interface ControllerContext {
   apiLevel: number;
@@ -23,13 +21,21 @@ export const ModelContext = createContext({} as ControllerContext);
 const queryClient = new QueryClient();
 
 export const ControllerProvider: FC<PropsWithChildren> = ({ children }) => {
+  const connectorRef = useRef<PollConnector>();
   const [connected, setConnected] = useState(false);
   const [apiLevel, setApiLevel] = useState(0);
   const [sessionTimeout, setSessionTimeout] = useState(8000);
   const [pollInterval, setPollInterval] = useState(1000);
 
+  useEffect(() => {
+    const host = process.env.NODE_ENV === 'development' ? '192.168.1.9' : window.location.host;
+    connectorRef.current = new PollConnector(host);
+  }, []);
+
   const connect = async () => {
-    const response = await connector.connect();
+    if (!connectorRef.current) throw new Error('Connector not initialized');
+
+    const response = await connectorRef.current.connect('Jack.29e9bca2');
 
     setConnected(true);
     setApiLevel(response.apiLevel);
@@ -37,19 +43,28 @@ export const ControllerProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   const disconnect = async () => {
+    if (!connectorRef.current) throw new Error('Connector not initialized');
+
     try {
-      await connector.disconnect();
+      await connectorRef.current.disconnect();
     } finally {
       setConnected(false);
     }
   };
 
   const useModel = <T extends ModelKey>(key: T, refetch?: boolean) =>
-    useQuery(['model', key], async () => connector.getModel(key), {
-      enabled: connected,
-      refetchInterval: refetch ? pollInterval : false,
-      onError: disconnect,
-    });
+    useQuery(
+      ['model', key],
+      async () => {
+        if (!connectorRef.current) throw new Error('Connector not initialized');
+        return connectorRef.current.getModel(key);
+      },
+      {
+        enabled: connected,
+        refetchInterval: refetch ? pollInterval : false,
+        onError: disconnect,
+      }
+    );
 
   return (
     <ModelContext.Provider value={{ connected, apiLevel, sessionTimeout, connect, disconnect, useModel }}>
